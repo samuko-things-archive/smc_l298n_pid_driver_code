@@ -9,6 +9,6 @@ This is a child project of the Samuko Motor Controller (`smc`) project. It conta
 
 - Open the smc_l298n_pid_driver_code.ino file in your ArduinoIDE
 
-- select the board - `Arduino UNO` - and PORT. 
+- select the board - `Arduino UNO` - and PORT `(based on the FTDI programmer)`. 
 
-- verify and upload the code the code to the `smc_l298n_driver module` via FTDI programmer.
+- verify and upload the code the code to the `smc_l298n_pid_driver module` via FTDI programmer.
