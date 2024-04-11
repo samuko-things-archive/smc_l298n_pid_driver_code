@@ -2,11 +2,14 @@
 #define SERIAL_I2C_COMM_API_H
 #include<Arduino.h>
 #include <Wire.h>
-#include "global_eeprom_variables.h"
 #include "eeprom_setup.h"
+
+
 
 float maxFloat = 99999.888, minFloat = -99999.888;
 long maxLong =  2147000000, minLong = -2147000000;
+
+
 
 void initLed0()
 {
@@ -190,7 +193,7 @@ String sendPidMode(){
 
 
 ////////////////////////////////////////////////////////////////////////
-String setEncAppr(int ppr){
+String setEncAppr(float ppr){
   if(!pidMode){
     setPPR_A(ppr);
     encA_ppr = getPPR_A();
@@ -203,7 +206,7 @@ String sendEncAppr(){
 }
 
 
-String setEncBppr(int ppr){
+String setEncBppr(float ppr){
   if(!pidMode){
     setPPR_B(ppr);
     encB_ppr = getPPR_B();
@@ -472,12 +475,6 @@ String resetEEPROM(){
   else return "0";
 }
 ////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
 
 
 

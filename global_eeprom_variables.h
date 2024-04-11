@@ -8,8 +8,8 @@
 
 ///////////////////////////////////////////////////
 // store encoder pulsePerRev needed by encoder
-int encA_ppr = 0;
-int encB_ppr = 0;
+float encA_ppr = 1.0;
+float encB_ppr = 1.0;
 unsigned long encA_stopFreq = 5000; // in us
 unsigned long encB_stopFreq = 5000; // in us
 

@@ -1,5 +1,6 @@
 /////////////////// STORING AND READING PARAMETERS FROM EEPROM /////////////////
 #include <EEPROM.h>
+#include "global_eeprom_variables.h"
 
 int KP_A_ADDRESS = 0;
 int KP_B_ADDRESS = 4;
@@ -329,8 +330,8 @@ void resetAllParams(){
   setFilterOrder_A(1);
   setFilterOrder_B(1);
 
-  setFilterCutOffFreq_A(5.00);
-  setFilterCutOffFreq_B(5.00);
+  setFilterCutOffFreq_A(1.00);
+  setFilterCutOffFreq_B(1.00);
 
   setStopFreq_A(5000);
   setStopFreq_B(5000);

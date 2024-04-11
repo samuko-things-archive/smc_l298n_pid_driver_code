@@ -102,7 +102,7 @@ void pidInit() {
 
 unsigned long serialCommTime, serialCommSampleTime = 10; //ms -> (1000/sampleTime) hz
 unsigned long pidTime, pidSampleTime = 5; //ms -> (1000/sampleTime) hz
-unsigned long pidStopTime, pidStopSampleTime = 1000; //ms -> (1000/sampleTime) hz
+unsigned long pidStopTime, pidStopSampleTime = 500; //ms -> (1000/sampleTime) hz
 
 void setup() {
   Serial.begin(115200);
@@ -117,18 +117,17 @@ void setup() {
   // update global params with eeprom contents
   updateGlobalParamsFromEERPOM();
   /////////////////////////////////////////////
-  delay(500);
   
   Wire.begin(getI2CADDRESS());                
   Wire.onReceive(i2cSlaveReceiveData);
   Wire.onRequest(i2cSlaveSendData);
 
   onLed0();
-  delay(1000);
+  delay(800);
   offLed0();
-  delay(500);
+  delay(400);
   onLed1();
-  delay(1000);
+  delay(800);
   offLed1();
   
   encoderInit();
@@ -150,10 +149,15 @@ void loop() {
   encB.resetFrequency();
   ///////////////////////////////////////////////////////////////////
 
-
+  ////////// using the serial communiaction API ////////////////////////
+  if ((millis() - serialCommTime) >= serialCommSampleTime) {
+    serialReceiveAndSendData();
+    serialCommTime = millis();
+  }
+  /////////////////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////////
-  if(abs(targetA)<0.01 && abs(targetB)<0.01){
+  if(abs(targetA)<0.001 && abs(targetB)<0.001){
     if(pidMode==true){
       if ((millis() - pidStopTime) >= pidStopSampleTime) {
         setPidModeFunc(0);
@@ -172,8 +176,6 @@ void loop() {
   }
   ///////////////////////////////////////////////////////////////
 
-
-
   ////////////// PID OPERATION /////////////////////////////////
   filteredAngVelA = lpfA.filt(encA.getAngVel());
   filteredAngVelB = lpfB.filt(encB.getAngVel());
@@ -189,14 +191,5 @@ void loop() {
   //   pidTime = millis();
   // }
   //////////////////////////////////////////////////////////////////////////
-
-
-
-  ////////// using the serial communiaction API ////////////////////////
-  if ((millis() - serialCommTime) >= serialCommSampleTime) {
-    serialReceiveAndSendData();
-    serialCommTime = millis();
-  }
-  /////////////////////////////////////////////////////////////////////
 
 }
