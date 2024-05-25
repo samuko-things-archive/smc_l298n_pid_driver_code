@@ -540,31 +540,31 @@ void i2cSlaveReceiveData(int dataSizeInBytes){
   }
 
   
-  if(i2cDataBuffer[0] == "pos"){
+  if(i2cDataBuffer[0] == "/pos"){
     i2c_msg = sendMotorsPos();
   } 
   
-  else if (i2cDataBuffer[0] == "vel") {
+  else if (i2cDataBuffer[0] == "/vel") {
     i2c_msg = sendMotorsVel();
   }
 
-  else if (i2cDataBuffer[0] == "dataA") {
+  else if (i2cDataBuffer[0] == "/dataA") {
     i2c_msg = sendMotorAData();
   }
 
-  else if (i2cDataBuffer[0] == "dataB") {
+  else if (i2cDataBuffer[0] == "/dataB") {
     i2c_msg = sendMotorBData();
   }
   
-  else if (i2cDataBuffer[0] == "pwm") {
+  else if (i2cDataBuffer[0] == "/pwm") {
     i2c_msg = setMotorsPwm(constrain(i2cDataBuffer[1].toInt(), -255, 255), constrain(i2cDataBuffer[2].toInt(), -255, 255));
   }
 
-  else if (i2cDataBuffer[0] == "tag") {
+  else if (i2cDataBuffer[0] == "/tag") {
     i2c_msg = setMotorsTarget(i2cDataBuffer[1].toFloat(), i2cDataBuffer[2].toFloat());
   }
 
-  // else if (i2cDataBuffer[0] == "mode") {
+  // else if (i2cDataBuffer[0] == "/mode") {
   //   if (i2cDataBuffer[1]=="") i2c_msg = sendPidMode();
   //   else i2c_msg = setPidMode(i2cDataBuffer[1].toInt());
   // }
@@ -641,188 +641,137 @@ void serialReceiveAndSendData() {
 
       onLed1();
 
-      if(serDataBuffer[0] == "pos"){
+      if(serDataBuffer[0] == "/pos"){
         ser_msg = sendMotorsPos();
         Serial.println(ser_msg);
         ser_msg = "";
       }
       
-      else if (serDataBuffer[0] == "vel") {
+      else if (serDataBuffer[0] == "/vel") {
         ser_msg = sendMotorsVel();
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-
-
-
-
-      else if (serDataBuffer[0] == "velA") {
+      else if (serDataBuffer[0] == "/velA") {
         ser_msg = sendMotorAVel();
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-      else if (serDataBuffer[0] == "velB") {
+      else if (serDataBuffer[0] == "/velB") {
         ser_msg = sendMotorBVel();
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-
-
-
-
-      else if (serDataBuffer[0] == "pVelA") {
+      else if (serDataBuffer[0] == "/pVelA") {
         ser_msg = sendMotorAVelPID();
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-      else if (serDataBuffer[0] == "pVelB") {
+      else if (serDataBuffer[0] == "/pVelB") {
         ser_msg = sendMotorBVelPID();
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-
-
-
-
-
-      else if (serDataBuffer[0] == "dataA") {
+      else if (serDataBuffer[0] == "/dataA") {
         ser_msg = sendMotorAData();
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-      else if (serDataBuffer[0] == "dataB") {
+      else if (serDataBuffer[0] == "/dataB") {
         ser_msg = sendMotorBData();
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-
-
-
-
-      else if (serDataBuffer[0] == "pwm") {
+      else if (serDataBuffer[0] == "/pwm") {
         ser_msg = setMotorsPwm(constrain(serDataBuffer[1].toInt(), -255, 255), constrain(serDataBuffer[2].toInt(), -255, 255));
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-      else if (serDataBuffer[0] == "tag") {
+      else if (serDataBuffer[0] == "/tag") {
         ser_msg = setMotorsTarget(serDataBuffer[1].toFloat(), serDataBuffer[2].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-
-
-
-
-
-      else if (serDataBuffer[0] == "mode") {
+      else if (serDataBuffer[0] == "/mode") {
         if (serDataBuffer[1]=="") ser_msg = sendPidMode();
         else ser_msg = setPidMode(serDataBuffer[1].toInt());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-
-
-
-
-
-      else if (serDataBuffer[0] == "pprA") {
+      else if (serDataBuffer[0] == "/pprA") {
         if (serDataBuffer[1]=="") ser_msg = sendEncAppr();
         else ser_msg = setEncAppr(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
       
-      else if (serDataBuffer[0] == "pprB") {
+      else if (serDataBuffer[0] == "/pprB") {
         if (serDataBuffer[1]=="") ser_msg = sendEncBppr();
         else ser_msg = setEncBppr(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-
-
-
-
-
-
-      else if (serDataBuffer[0] == "kpA") {
+      else if (serDataBuffer[0] == "/kpA") {
         if (serDataBuffer[1]=="") ser_msg = sendMotorAkp();
         else ser_msg = setMotorAkp(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-      else if (serDataBuffer[0] == "kpB") {
+      else if (serDataBuffer[0] == "/kpB") {
         if (serDataBuffer[1]=="") ser_msg = sendMotorBkp();
         else ser_msg = setMotorBkp(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-
-
-
-
-      
-      else if (serDataBuffer[0] == "kiA") {
+      else if (serDataBuffer[0] == "/kiA") {
         if (serDataBuffer[1]=="") ser_msg = sendMotorAki();
         else ser_msg = setMotorAki(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-      else if (serDataBuffer[0] == "kiB") {
+      else if (serDataBuffer[0] == "/kiB") {
         if (serDataBuffer[1]=="") ser_msg = sendMotorBki();
         else ser_msg = setMotorBki(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-
-
-
-
-
-
-      
-      else if (serDataBuffer[0] == "kdA") {
+      else if (serDataBuffer[0] == "/kdA") {
         if (serDataBuffer[1]=="") ser_msg = sendMotorAkd();
         else ser_msg = setMotorAkd(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
       
-      else if (serDataBuffer[0] == "kdB") {
+      else if (serDataBuffer[0] == "/kdB") {
         if (serDataBuffer[1]=="") ser_msg = sendMotorBkd();
         else ser_msg = setMotorBkd(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-
-
-
-
-
-
-      else if (serDataBuffer[0] == "ordA") {
+      else if (serDataBuffer[0] == "/ordA") {
         if (serDataBuffer[1]=="") ser_msg = sendFilterOrderA();
         else ser_msg = setFilterOrderA(serDataBuffer[1].toInt());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-      else if (serDataBuffer[0] == "ordB") {
+      else if (serDataBuffer[0] == "/ordB") {
         if (serDataBuffer[1]=="") ser_msg = sendFilterOrderB();
         else ser_msg = setFilterOrderB(serDataBuffer[1].toInt());
         Serial.println(ser_msg);
@@ -830,82 +779,56 @@ void serialReceiveAndSendData() {
       }
 
 
-
-
-
-
-
-
-      else if (serDataBuffer[0] == "f0A") {
+      else if (serDataBuffer[0] == "/f0A") {
         if (serDataBuffer[1]=="") ser_msg = sendCutOffFreqA();
         else ser_msg = setCutOffFreqA(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-      else if (serDataBuffer[0] == "f0B") {
+      else if (serDataBuffer[0] == "/f0B") {
         if (serDataBuffer[1]=="") ser_msg = sendCutOffFreqB();
         else ser_msg = setCutOffFreqB(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-
-
-
-
-
-
-
-      else if (serDataBuffer[0] == "sfA") {
+      else if (serDataBuffer[0] == "/sfA") {
         if (serDataBuffer[1]=="") ser_msg = sendStopFreqA();
         else ser_msg = setStopFreqA(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-      else if (serDataBuffer[0] == "sfB") {
+      else if (serDataBuffer[0] == "/sfB") {
         if (serDataBuffer[1]=="") ser_msg = sendStopFreqB();
         else ser_msg = setStopFreqB(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
 
-
-
-
-
-
-
-
-      else if (serDataBuffer[0] == "rdirA") {
+      else if (serDataBuffer[0] == "/rdirA") {
         if (serDataBuffer[1]=="") ser_msg = sendRdirA();
         else ser_msg = setRdirA(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
       
-      else if (serDataBuffer[0] == "rdirB") {
+      else if (serDataBuffer[0] == "/rdirB") {
         if (serDataBuffer[1]=="") ser_msg = sendRdirB();
         else ser_msg = setRdirB(serDataBuffer[1].toFloat());
         Serial.println(ser_msg);
         ser_msg = "";
       }
-    
 
-
-
-
-
-
-      else if (serDataBuffer[0] == "i2c") {
+      else if (serDataBuffer[0] == "/i2c") {
         if (serDataBuffer[1]=="") ser_msg = sendI2Caddress();
         else ser_msg = setI2Caddress(constrain(serDataBuffer[1].toInt(), 0, 127));
         Serial.println(ser_msg);
         ser_msg = "";
       }
       
-      else if (serDataBuffer[0] == "reset") {
+      else if (serDataBuffer[0] == "/reset") {
         ser_msg = resetEEPROM();
         Serial.println(ser_msg);
         ser_msg = "";
@@ -929,8 +852,6 @@ void serialReceiveAndSendData() {
   serDataBuffer[2] = "";
 }
 //////////////////////////////////////////////////////////////////////////
-
-
 
 
 
