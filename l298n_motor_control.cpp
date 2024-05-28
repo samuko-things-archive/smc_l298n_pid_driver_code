@@ -1,6 +1,6 @@
-#include "motor_bridge_control.h"
+#include "l298n_motor_control.h"
 
-MotorControl::MotorControl(int IN1_pin, int IN2_pin, int en_pin)
+L298NMotorControl::L298NMotorControl(int IN1_pin, int IN2_pin, int en_pin)
 {
   in1Pin = IN1_pin;
   in2Pin = IN2_pin;
@@ -14,7 +14,7 @@ MotorControl::MotorControl(int IN1_pin, int IN2_pin, int en_pin)
   digitalWrite(in2Pin, LOW);
 }
 
-void MotorControl::sendPWM(int pwmVal)
+void L298NMotorControl::sendPWM(int pwmVal)
 {
   if (pwmVal > 0)
   {
@@ -33,12 +33,12 @@ void MotorControl::sendPWM(int pwmVal)
   }
 }
 
-int MotorControl::getDirection()
+int L298NMotorControl::getDirection()
 {
   return dir;
 }
 
-void MotorControl::test()
+void L298NMotorControl::test()
 {
   for (int pwmVal = -255; pwmVal <= 255; pwmVal += 5)
   {
@@ -52,28 +52,28 @@ void MotorControl::test()
   }
 }
 
-void MotorControl::setForwardDirection()
+void L298NMotorControl::setForwardDirection()
 {
   dir = 1;
   digitalWrite(in1Pin, HIGH);
   digitalWrite(in2Pin, LOW);
 }
 
-void MotorControl::setReverseDirection()
+void L298NMotorControl::setReverseDirection()
 {
   dir = 0;
   digitalWrite(in1Pin, LOW);
   digitalWrite(in2Pin, HIGH);
 }
 
-void MotorControl::setHalt()
+void L298NMotorControl::setHalt()
 {
   dir = 0;
   digitalWrite(in1Pin, LOW);
   digitalWrite(in2Pin, LOW);
 }
 
-void MotorControl::delayMs(int ms)
+void L298NMotorControl::delayMs(int ms)
 {
   for (int i = 0; i < ms; i += 1)
   {

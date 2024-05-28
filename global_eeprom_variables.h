@@ -2,7 +2,7 @@
 #define GLOBAL_EEPROM_VARIABLES
 #include "encoder_setup.h"
 #include "adaptive_low_pass_filter.h"
-#include "motor_bridge_control.h"
+#include "l298n_motor_control.h"
 #include "simple_pid_control.h"
 
 
@@ -48,11 +48,11 @@ AdaptiveLowPassFilter lpfB(orderB, cutOffFreqB);
 
 // motor A H-Bridge Connection
 int IN1 = 7, IN2 = 8, enA = 5;
-MotorControl motorA(IN1, IN2, enA);
+L298NMotorControl motorA(IN1, IN2, enA);
 
 // motor B H-Bridge Connection
 int IN3 = 11, IN4 = 12, enB = 6;
-MotorControl motorB(IN3, IN4, enB);
+L298NMotorControl motorB(IN3, IN4, enB);
 
 
 
