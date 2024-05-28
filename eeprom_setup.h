@@ -322,8 +322,8 @@ void resetAllParams(){
   setKD_A(0.00);
   setKD_B(0.00);
 
-  setPPR_A(1.00);
-  setPPR_B(1.00);
+  setPPR_A(1000.00);
+  setPPR_B(1000.00);
 
   setI2CADDRESS(1);
 

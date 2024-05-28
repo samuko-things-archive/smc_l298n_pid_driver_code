@@ -8,8 +8,8 @@
 
 ///////////////////////////////////////////////////
 // store encoder pulsePerRev needed by encoder
-float encA_ppr = 1.0;
-float encB_ppr = 1.0;
+float encA_ppr = 1000.0;
+float encB_ppr = 1000.0;
 unsigned long encA_stopFreq = 5000; // in us
 unsigned long encB_stopFreq = 5000; // in us
 
@@ -88,7 +88,7 @@ SimplePID pidMotorB(kpB, kiB, kdB, outMin, outMax);
 bool pidMode = false; // true-PID MODE, false-SETUP MODE
 
 // initial i2cAddress
-int i2cAddress = 0;
+int i2cAddress = 1;
 
 
 #endif
