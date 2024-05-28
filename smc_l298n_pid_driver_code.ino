@@ -177,8 +177,8 @@ void loop() {
   ///////////////////////////////////////////////////////////////
 
   ////////////// PID OPERATION /////////////////////////////////
-  filteredAngVelA = lpfA.filt(encA.getAngVel());
-  filteredAngVelB = lpfB.filt(encB.getAngVel());
+  filteredAngVelA = lpfA.filter(encA.getAngVel());
+  filteredAngVelB = lpfB.filter(encB.getAngVel());
 
   if (pidMode){
     outputA = pidMotorA.compute(targetA, filteredAngVelA); // targetA is among the global params

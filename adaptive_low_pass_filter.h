@@ -1,5 +1,5 @@
-#ifndef LOW_PASS_FILTER_SETUP_H
-#define LOW_PASS_FILTER_SETUP_H
+#ifndef ADAPTIVE_LOW_PASS_FILTER_H
+#define ADAPTIVE_LOW_PASS_FILTER_H
 #include <Arduino.h>
 
 
@@ -21,7 +21,7 @@ class AdaptiveLowPassFilter
     void setCutOffFreq(float);
     void setOrder(int);
     void setCoef();
-    float filt(float);
+    float filter(float);
 };
 
 

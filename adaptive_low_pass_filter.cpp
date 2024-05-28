@@ -77,7 +77,7 @@ void AdaptiveLowPassFilter::setCoef()
   }
 }
 
-float AdaptiveLowPassFilter::filt(float xn)
+float AdaptiveLowPassFilter::filter(float xn)
 {
   // Provide me with the current raw value: x
   // I will give you the current filtered value: y

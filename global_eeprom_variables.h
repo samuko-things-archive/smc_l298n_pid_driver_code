@@ -1,7 +1,7 @@
 #ifndef GLOBAL_EEPROM_VARIABLES
 #define GLOBAL_EEPROM_VARIABLES
 #include "encoder_setup.h"
-#include "low_pass_filter_setup.h"
+#include "adaptive_low_pass_filter.h"
 #include "motor_bridge_control.h"
 #include "simple_pid_control.h"
 
