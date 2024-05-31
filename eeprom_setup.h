@@ -1,5 +1,6 @@
 /////////////////// STORING AND READING PARAMETERS FROM EEPROM /////////////////
 #include <EEPROM.h>
+#include <Wire.h>
 #include "global_eeprom_variables.h"
 
 int KP_A_ADDRESS = 0;
@@ -30,6 +31,10 @@ int STOP_FREQ_B_ADDRESS = 60;
 int RDIR_A_ADDRESS = 64;
 int RDIR_B_ADDRESS = 68;
 
+int MAX_VEL_A_ADDRESS = 72;
+int MAX_VEL_B_ADDRESS = 76;
+
+int FREQ_ALLOWABLE_ADDRESS = 80;
 
 
 
@@ -38,7 +43,43 @@ int RDIR_B_ADDRESS = 68;
 
 
 
+/////////////////////////////////////////
+float getAllowableFreq(){
+  float freq_allowed;
+  EEPROM.get(FREQ_ALLOWABLE_ADDRESS, freq_allowed);
+  return freq_allowed;
+}
+void setAllowableFreq(float freq_allowed){
+  EEPROM.put(FREQ_ALLOWABLE_ADDRESS, freq_allowed);
+  freq_per_tick_allowable = getAllowableFreq();
+}
+//////////////////////////////////////////////////////
 
+
+//////////////////////////////////////////
+float getMAXVEL_A(){
+  float max_vel;
+  EEPROM.get(MAX_VEL_A_ADDRESS, max_vel);
+  return max_vel;
+}
+void setMAXVEL_A(float max_vel){
+  EEPROM.put(MAX_VEL_A_ADDRESS, max_vel);
+  maxVelA = getMAXVEL_A();
+}
+//////////////////////////////////////////
+
+
+/////////////////////////////////////////
+float getMAXVEL_B(){
+  float max_vel;
+  EEPROM.get(MAX_VEL_B_ADDRESS, max_vel);
+  return max_vel;
+}
+void setMAXVEL_B(float max_vel){
+  EEPROM.put(MAX_VEL_B_ADDRESS, max_vel);
+  maxVelB = getMAXVEL_B();
+}
+//////////////////////////////////////////
 
 
 
@@ -134,6 +175,9 @@ void setPPR_A(float pprA){
   EEPROM.put(PPR_A_ADDRESS, pprA);
   encA_ppr = getPPR_A();
   encA.setPulsePerRev(encA_ppr);
+
+  float wA_allowable = calc_wA_allowable(); // in radians/sec
+  setMAXVEL_A(wA_allowable);
 }
 
 
@@ -146,6 +190,9 @@ void setPPR_B(float pprB){
   EEPROM.put(PPR_B_ADDRESS, pprB);
   encB_ppr = getPPR_B();
   encB.setPulsePerRev(encB_ppr);
+
+  float wB_allowable = calc_wB_allowable(); // in radians/sec
+  setMAXVEL_B(wB_allowable);
 }
 /////////////////////////////////////////
 
@@ -338,6 +385,13 @@ void resetAllParams(){
 
   setRDIR_A(1.00);
   setRDIR_B(1.00);
+
+  float wA_allowable = calc_wA_allowable(); // in radians/sec
+  float wB_allowable = calc_wB_allowable(); // in radians/sec
+  setMAXVEL_A(wA_allowable);
+  setMAXVEL_B(wB_allowable);
+
+  setAllowableFreq(2000.00);
 }
 
 
@@ -381,5 +435,10 @@ void updateGlobalParamsFromEERPOM(){
 
   rdirA = getRDIR_A();
   rdirB = getRDIR_B();
+
+  maxVelA = getMAXVEL_A();
+  maxVelB = getMAXVEL_B();
+
+  freq_per_tick_allowable = getAllowableFreq();
 }
 /////////////////////////////////////////////////////////////

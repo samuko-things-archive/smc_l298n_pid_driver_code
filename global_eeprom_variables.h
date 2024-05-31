@@ -91,6 +91,28 @@ bool pidMode = false; // true-PID MODE, false-SETUP MODE
 int i2cAddress = 1;
 
 
+// calcute allowable maximum angular velocity (for overall smooth operation of the whole system)
+float freq_per_tick_allowable = 2000.0; //Hz
+float wA_allowable = 10.00;
+float wB_allowable = 10.00;
+
+float calc_wA_allowable(){
+  wA_allowable = (2*PI*freq_per_tick_allowable)/encA_ppr;
+  return wA_allowable;
+}
+
+float calc_wB_allowable(){
+  wB_allowable = (2*PI*freq_per_tick_allowable)/encB_ppr;
+  return wB_allowable;
+}
+
+
+// maximum motor velocity that can be commanded
+float maxVelA = calc_wA_allowable(); // in radians/sec
+float maxVelB = calc_wB_allowable(); // in radians/sec
+
+
+
 #endif
 
 

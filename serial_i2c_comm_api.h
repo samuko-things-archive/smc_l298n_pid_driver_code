@@ -43,9 +43,11 @@ void offLed1()
 
 /////////////////////////////////////////////////////////////////////////////////////
 String sendMotorsPos(){
-  String data = String(constrain(rdirA*encA.getAngPos(), minFloat, maxFloat), 4);
+  float angPosA = encA.getAngPos();
+  float angPosB = encB.getAngPos();
+  String data = String(constrain(rdirA*angPosA, minFloat, maxFloat), 4);
   data += ",";
-  data += String(constrain(rdirB*encB.getAngPos(), minFloat, maxFloat), 4);
+  data += String(constrain(rdirB*angPosB, minFloat, maxFloat), 4);
   return data;
 }
 
@@ -61,14 +63,16 @@ String sendMotorsVel(){
 
 ///////////////////////////////////////////////////////////////////////////////////////
 String sendMotorAVel(){
-  String data = String(constrain(rdirA*encA.getAngVel(), minFloat, maxFloat), 4);
+  float rawAngVelA = encA.getAngVel();
+  String data = String(constrain(rdirA*rawAngVelA, minFloat, maxFloat), 4);
   data += ",";
   data += String(constrain(rdirA*filteredAngVelA, minFloat, maxFloat), 4);
   return data;
 }
 
 String sendMotorBVel(){
-  String data = String(constrain(rdirB*encB.getAngVel(), minFloat, maxFloat), 4);
+float rawAngVelB = encB.getAngVel();
+  String data = String(constrain(rdirB*rawAngVelB, minFloat, maxFloat), 4);
   data += ",";
   data += String(constrain(rdirB*filteredAngVelB, minFloat, maxFloat), 4);
   return data;
@@ -98,14 +102,16 @@ String sendMotorBVelPID(){
 
 ////////////////////////////////////////////////////////////////////////////////////////
 String sendMotorAData(){
-  String data = String(constrain(rdirA*encA.getAngPos(), minFloat, maxFloat), 4);
+  float angPosA = encA.getAngPos();
+  String data = String(constrain(rdirA*angPosA, minFloat, maxFloat), 4);
   data += ",";
   data += String(constrain(rdirA*filteredAngVelA, minFloat, maxFloat), 4);
   return data;
 }
 
 String sendMotorBData(){
-  String data = String(constrain(rdirB*encB.getAngPos(), minFloat, maxFloat), 4);
+  float angPosB = encB.getAngPos();
+  String data = String(constrain(rdirB*angPosB, minFloat, maxFloat), 4);
   data += ",";
   data += String(constrain(rdirB*filteredAngVelB, minFloat, maxFloat), 4);
   return data;
@@ -128,15 +134,18 @@ String setMotorsPwm(int valA, int valB){
 
 
 String setMotorsTarget(float valA, float valB){
+  float tVelA = constrain(valA, -1.00*maxVelA, maxVelA);
+  float tVelB = constrain(valB, -1.00*maxVelB, maxVelB); 
+
   // if (pidMode){
-  //   targetA = rdirA*valA;
-  //   targetB = rdirB*valB;
+  //   targetA = rdirA*tVelA;
+  //   targetB = rdirB*tVelB;
   //   return "1";
   // }
   // else return "0";
 
-  targetA = rdirA*valA;
-  targetB = rdirB*valB;
+  targetA = rdirA*tVelA;
+  targetB = rdirB*tVelB;
   return "1";
 }
 /////////////////////////////////////////////////////////////////////////////////////
@@ -477,6 +486,48 @@ String resetEEPROM(){
 ////////////////////////////////////////////////////////////////////////
 
 
+////////////////////////////////////////////
+String setMaxVelA(float vel){
+  if(!pidMode){
+    float max_vel = abs(vel);
+    setMAXVEL_A(constrain(max_vel, -1.00*wA_allowable, wA_allowable));
+    maxVelA = getMAXVEL_A();
+    return "1";
+  }
+  else return "0";
+}
+String sendMaxVelA(){
+  return String(maxVelA,0);
+}
+
+String setMaxVelB(float vel){
+  if(!pidMode){
+    float max_vel = abs(vel);
+    setMAXVEL_B(constrain(max_vel, -1.00*wB_allowable, wB_allowable));
+    maxVelB = getMAXVEL_B();
+    return "1";
+  }
+  else return "0";
+}
+String sendMaxVelB(){
+  return String(maxVelB,0);
+}
+
+
+String setAllowedFreq(float freq){
+  if(!pidMode){
+    setAllowableFreq(freq);
+    freq_per_tick_allowable = getAllowableFreq();
+    return "1";
+  }
+  else return "0";
+}
+String sendAllowedFreq(){
+  return String(freq_per_tick_allowable,2);
+}
+////////////////////////////////////////////
+
+
 
 
 
@@ -557,11 +608,21 @@ void i2cSlaveReceiveData(int dataSizeInBytes){
   }
   
   else if (i2cDataBuffer[0] == "/pwm") {
-    i2c_msg = setMotorsPwm(constrain(i2cDataBuffer[1].toInt(), -255, 255), constrain(i2cDataBuffer[2].toInt(), -255, 255));
+    int pwm_a = i2cDataBuffer[1].toInt();
+    int pwm_b = i2cDataBuffer[2].toInt();
+    i2c_msg = setMotorsPwm(constrain(pwm_a, -255, 255), constrain(pwm_b, -255, 255));
   }
 
   else if (i2cDataBuffer[0] == "/tag") {
     i2c_msg = setMotorsTarget(i2cDataBuffer[1].toFloat(), i2cDataBuffer[2].toFloat());
+  }
+
+  else if (i2cDataBuffer[0] == "/maxVelA") {
+    i2c_msg = sendMaxVelA();
+  }
+
+  else if (i2cDataBuffer[0] == "/maxVelB") {
+    i2c_msg = sendMaxVelB();
   }
 
   // else if (i2cDataBuffer[0] == "/mode") {
@@ -690,7 +751,9 @@ void serialReceiveAndSendData() {
       }
 
       else if (serDataBuffer[0] == "/pwm") {
-        ser_msg = setMotorsPwm(constrain(serDataBuffer[1].toInt(), -255, 255), constrain(serDataBuffer[2].toInt(), -255, 255));
+        int pwm_a = serDataBuffer[1].toInt();
+        int pwm_b = serDataBuffer[2].toInt();
+        ser_msg = setMotorsPwm(constrain(pwm_a, -255, 255), constrain(pwm_b, -255, 255));
         Serial.println(ser_msg);
         ser_msg = "";
       }
@@ -823,7 +886,10 @@ void serialReceiveAndSendData() {
 
       else if (serDataBuffer[0] == "/i2c") {
         if (serDataBuffer[1]=="") ser_msg = sendI2Caddress();
-        else ser_msg = setI2Caddress(constrain(serDataBuffer[1].toInt(), 0, 127));
+        else {
+          int i2c_address = serDataBuffer[1].toInt();
+          ser_msg = setI2Caddress(constrain(i2c_address, 0, 127));
+        }
         Serial.println(ser_msg);
         ser_msg = "";
       }
@@ -834,9 +900,28 @@ void serialReceiveAndSendData() {
         ser_msg = "";
       }
 
+      else if (serDataBuffer[0] == "/freq") {
+        if (serDataBuffer[1]=="") ser_msg = sendAllowedFreq();
+        else ser_msg = setAllowedFreq(serDataBuffer[1].toFloat());
+        Serial.println(ser_msg);
+        ser_msg = "";
+      }
+
+      else if (serDataBuffer[0] == "/maxVelA") {
+        if (serDataBuffer[1]=="") ser_msg = sendMaxVelA();
+        else ser_msg = setMaxVelA(serDataBuffer[1].toFloat());
+        Serial.println(ser_msg);
+        ser_msg = "";
+      }
+
+      else if (serDataBuffer[0] == "/maxVelB") {
+        if (serDataBuffer[1]=="") ser_msg = sendMaxVelB();
+        else ser_msg = setMaxVelB(serDataBuffer[1].toFloat());
+        Serial.println(ser_msg);
+        ser_msg = "";
+      }
 
       offLed1();
-
 
     } else {
       ser_msg = "0";

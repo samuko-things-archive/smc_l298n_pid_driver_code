@@ -1,4 +1,4 @@
-#include "low_pass_filter_setup.h"
+#include "adaptive_low_pass_filter.h"
 
 AdaptiveLowPassFilter::AdaptiveLowPassFilter(int orderVal, float f0)
 {
