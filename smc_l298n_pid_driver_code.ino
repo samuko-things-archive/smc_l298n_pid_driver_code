@@ -102,7 +102,7 @@ void pidInit() {
 
 unsigned long serialCommTime, serialCommSampleTime = 10; //ms -> (1000/sampleTime) hz
 unsigned long pidTime, pidSampleTime = 5; //ms -> (1000/sampleTime) hz
-unsigned long pidStopTime, pidStopSampleTime = 500; //ms -> (1000/sampleTime) hz
+unsigned long pidStopTime, pidStopSampleTime = 250; //ms -> (1000/sampleTime) hz
 
 void setup() {
   Serial.begin(115200);
@@ -117,10 +117,10 @@ void setup() {
   // update global params with eeprom contents
   updateGlobalParamsFromEERPOM();
   /////////////////////////////////////////////
-  
-  Wire.begin(getI2CADDRESS());                
-  Wire.onReceive(i2cSlaveReceiveData);
-  Wire.onRequest(i2cSlaveSendData);
+
+  Wire.begin(i2cAddress);
+  Wire.onReceive(i2cReceiveDataEvent);
+  Wire.onRequest(i2cSendDataEvent);
 
   onLed0();
   delay(800);
