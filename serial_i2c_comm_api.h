@@ -821,76 +821,38 @@ void serialReceiveAndSendData() {
 
 
 
-///////////////// I2C COMMUNICATION //////////////////////
+//----------------- I2C COMMUNICATION -------------------//
 
 String i2c_msg = "";
 
 String i2cMsg = "", i2cMsgBuffer, i2cDataBuffer[3];
 
-//-----------------------------------------------------//
-void saveData(String data_address)
+void i2cSlaveSendData()
 {
-  if (data_address == "/pwm")
+  String msg = "";
+  if (i2c_msg != "")
   {
-    int pwm_a = i2cDataBuffer[1].toInt();
-    int pwm_b = i2cDataBuffer[2].toInt();
-    setMotorsPwm(constrain(pwm_a, -255, 255), constrain(pwm_b, -255, 255));
+    msg = i2c_msg;
+    i2c_msg = "";
   }
-
-  else if (data_address == "/tag")
+  else
   {
-    setMotorsTarget(i2cDataBuffer[1].toFloat(), i2cDataBuffer[2].toFloat());
+    msg = "0";
+    i2c_msg = "";
   }
-
-  // else if (data_address == "/mode") {
-  //   setPidMode(i2cDataBuffer[1].toInt());
-  // }
+  char charArray[msg.length() + 1];
+  msg.toCharArray(charArray, msg.length() + 1);
+  Wire.write(charArray, msg.length());
 }
 
-void getData(String data_address)
+void i2cSlaveReceiveData(int dataSizeInBytes)
 {
-  if (data_address == "/pos")
-  {
-    i2c_msg = sendMotorsPos3dp();
-  }
 
-  else if (data_address == "/vel")
-  {
-    i2c_msg = sendMotorsVel();
-  }
-
-  else if (data_address == "/dataA")
-  {
-    i2c_msg = sendMotorAData();
-  }
-
-  else if (data_address == "/dataB")
-  {
-    i2c_msg = sendMotorBData();
-  }
-
-  else if (data_address == "/maxVelA")
-  {
-    i2c_msg = sendMaxVelA();
-  }
-
-  else if (data_address == "/maxVelB")
-  {
-    i2c_msg = sendMaxVelB();
-  }
-
-  // else if (data_address == "/mode") {
-  //   i2c_msg = sendPidMode();
-  // }
-}
-
-void i2cReceiveDataEvent(int dataSizeInBytes)
-{
   onLed0();
 
   int indexPos = 0, i = 0;
 
-  for (int j = 0; j < dataSizeInBytes; j += 1)
+  for (int i = 0; i < dataSizeInBytes; i += 1)
   {
     char c = Wire.read();
     i2cMsg += c;
@@ -919,40 +881,62 @@ void i2cReceiveDataEvent(int dataSizeInBytes)
     } while (indexPos >= 0);
   }
 
-  if (i2cDataBuffer[1] != "")
+  if (i2cDataBuffer[0] == "/pos")
   {
-    saveData(i2cDataBuffer[0]);
-
-    i2cMsg = "";
-    i2cMsgBuffer = "";
-    i2cDataBuffer[0] = "";
-    i2cDataBuffer[1] = "";
-    i2cDataBuffer[2] = "";
+    i2c_msg = sendMotorsPos3dp();
   }
 
+  else if (i2cDataBuffer[0] == "/vel")
+  {
+    i2c_msg = sendMotorsVel();
+  }
+
+  else if (i2cDataBuffer[0] == "/dataA")
+  {
+    i2c_msg = sendMotorAData();
+  }
+
+  else if (i2cDataBuffer[0] == "/dataB")
+  {
+    i2c_msg = sendMotorBData();
+  }
+
+  else if (i2cDataBuffer[0] == "/pwm")
+  {
+    int pwm_a = i2cDataBuffer[1].toInt();
+    int pwm_b = i2cDataBuffer[2].toInt();
+    i2c_msg = setMotorsPwm(constrain(pwm_a, -255, 255), constrain(pwm_b, -255, 255));
+  }
+
+  else if (i2cDataBuffer[0] == "/tag")
+  {
+    i2c_msg = setMotorsTarget(i2cDataBuffer[1].toFloat(), i2cDataBuffer[2].toFloat());
+  }
+
+  else if (i2cDataBuffer[0] == "/maxVelA")
+  {
+    i2c_msg = sendMaxVelA();
+  }
+
+  else if (i2cDataBuffer[0] == "/maxVelB")
+  {
+    i2c_msg = sendMaxVelB();
+  }
+
+  // else if (i2cDataBuffer[0] == "/mode") {
+  //   if (i2cDataBuffer[1]=="") i2c_msg = sendPidMode();
+  //   else i2c_msg = setPidMode(i2cDataBuffer[1].toInt());
+  // }
+
   offLed0();
-}
-
-void i2cSendDataEvent()
-{
-  onLed0();
-  getData(i2cDataBuffer[0]);
-
-  // Send response back to Master
-  char charArray[i2c_msg.length() + 1];
-  i2c_msg.toCharArray(charArray, i2c_msg.length() + 1);
-
-  Wire.write(charArray);
-
-  i2c_msg = "";
   i2cMsg = "";
   i2cMsgBuffer = "";
   i2cDataBuffer[0] = "";
   i2cDataBuffer[1] = "";
   i2cDataBuffer[2] = "";
-  offLed0();
 }
 //-----------------------------------------------------//
+
 
 //////////////////////////////////////////////////////////
 

@@ -118,9 +118,9 @@ void setup() {
   updateGlobalParamsFromEERPOM();
   /////////////////////////////////////////////
 
-  Wire.begin(i2cAddress);
-  Wire.onReceive(i2cReceiveDataEvent);
-  Wire.onRequest(i2cSendDataEvent);
+  Wire.begin(getI2CADDRESS());
+  Wire.onReceive(i2cSlaveReceiveData);
+  Wire.onRequest(i2cSlaveSendData);
 
   onLed0();
   delay(800);
