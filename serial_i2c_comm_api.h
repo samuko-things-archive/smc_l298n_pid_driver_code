@@ -146,13 +146,6 @@ String setMotorsTarget(float valA, float valB){
   float tVelA = constrain(valA, -1.00*maxVelA, maxVelA);
   float tVelB = constrain(valB, -1.00*maxVelB, maxVelB); 
 
-  // if (pidMode){
-  //   targetA = rdirA*tVelA;
-  //   targetB = rdirB*tVelB;
-  //   return "1";
-  // }
-  // else return "0";
-
   targetA = rdirA*tVelA;
   targetB = rdirB*tVelB;
   return "1";
@@ -640,13 +633,6 @@ void serialReceiveAndSendData() {
         ser_msg = "";
       }
 
-      else if (serDataBuffer[0] == "/mode") {
-        if (serDataBuffer[1]=="") ser_msg = sendPidMode();
-        else ser_msg = setPidMode(serDataBuffer[1].toInt());
-        Serial.println(ser_msg);
-        ser_msg = "";
-      }
-
       else if (serDataBuffer[0] == "/pprA") {
         if (serDataBuffer[1]=="") ser_msg = sendEncAppr();
         else ser_msg = setEncAppr(serDataBuffer[1].toFloat());
@@ -922,11 +908,6 @@ void i2cSlaveReceiveData(int dataSizeInBytes)
   {
     i2c_msg = sendMaxVelB();
   }
-
-  // else if (i2cDataBuffer[0] == "/mode") {
-  //   if (i2cDataBuffer[1]=="") i2c_msg = sendPidMode();
-  //   else i2c_msg = setPidMode(i2cDataBuffer[1].toInt());
-  // }
 
   offLed0();
   i2cMsg = "";
