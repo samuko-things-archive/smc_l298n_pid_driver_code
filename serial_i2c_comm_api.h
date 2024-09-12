@@ -171,33 +171,6 @@ String setPidModeFunc(int mode){
     pidMotorB.begin();
   }
 }
-String setPidMode(int mode){
-  if(mode == 0){
-    pidMode = false;
-    motorA.sendPWM(0);
-    motorB.sendPWM(0);
-    targetA = 0.00;
-    targetB = 0.00;
-    pidMotorA.begin();
-    pidMotorB.begin();
-    return "1";
-  } else if (mode == 1) {
-    pidMode = true;
-    motorA.sendPWM(0);
-    motorB.sendPWM(0);
-    targetA = 0.00;
-    targetB = 0.00;
-    pidMotorA.begin();
-    pidMotorB.begin();
-    return "1";
-  }
-  else {
-    return "0";
-  }
-}
-String sendPidMode(){
-  return String(pidMode);
-}
 ////////////////////////////////////////////////////////////////////////
 
 
@@ -205,12 +178,9 @@ String sendPidMode(){
 
 ////////////////////////////////////////////////////////////////////////
 String setEncAppr(float ppr){
-  if(!pidMode){
-    setPPR_A(ppr);
-    encA_ppr = getPPR_A();
-    return "1";
-  }
-  else return "0";
+  setPPR_A(ppr);
+  encA_ppr = getPPR_A();
+  return "1";
 }
 String sendEncAppr(){ 
   return String(encA_ppr);
@@ -218,12 +188,9 @@ String sendEncAppr(){
 
 
 String setEncBppr(float ppr){
-  if(!pidMode){
-    setPPR_B(ppr);
-    encB_ppr = getPPR_B();
-    return "1";
-  }
-  else return "0";
+  setPPR_B(ppr);
+  encB_ppr = getPPR_B();
+  return "1";
 }
 String sendEncBppr(){ 
   return String(encB_ppr);
@@ -235,12 +202,9 @@ String sendEncBppr(){
 
 /////////////////////////////////////////////////////////////////////
 String setMotorAkp(float kp){
-  if(!pidMode){
-    setKP_A(kp);
-    kpA = getKP_A();
-    return "1";
-  }
-  else return "0";
+  setKP_A(kp);
+  kpA = getKP_A();
+  return "1";
 }
 String sendMotorAkp(){
   return String(kpA,4);
@@ -249,12 +213,9 @@ String sendMotorAkp(){
 
 
 String setMotorBkp(float kp){
-  if(!pidMode){
-    setKP_B(kp);
-    kpB = getKP_B();
-    return "1";
-  }
-  else return "0";
+  setKP_B(kp);
+  kpB = getKP_B();
+  return "1";
 }
 String sendMotorBkp(){
   return String(kpB,4);
@@ -266,12 +227,9 @@ String sendMotorBkp(){
 
 //////////////////////////////////////////////////////////////////////
 String setMotorAki(float ki){
-  if(!pidMode){
-    setKI_A(ki);
-    kiA = getKI_A();
-    return "1";
-  }
-  else return "0";
+  setKI_A(ki);
+  kiA = getKI_A();
+  return "1";
 }
 String sendMotorAki(){
   return String(kiA,4);
@@ -279,12 +237,9 @@ String sendMotorAki(){
 
 
 String setMotorBki(float ki){
-  if(!pidMode){
-    setKI_B(ki);
-    kiB = getKI_B();
-    return "1"; 
-  }
-  else return "0";
+  setKI_B(ki);
+  kiB = getKI_B();
+  return "1";
 }
 String sendMotorBki(){
   return String(kiB,4);
@@ -296,12 +251,9 @@ String sendMotorBki(){
 
 //////////////////////////////////////////////////////////////////////
 String setMotorAkd(float kd){
-  if(!pidMode){
-    setKD_A(kd);
-    kdA = getKD_A();
-    return "1"; 
-  }
-  else return "0";
+  setKD_A(kd);
+  kdA = getKD_A();
+  return "1";
 }
 String sendMotorAkd(){
   return String(kdA,4);
@@ -309,12 +261,9 @@ String sendMotorAkd(){
 
 
 String setMotorBkd(float kd){
-  if(!pidMode){
-    setKD_B(kd);
-    kdB = getKD_B();
-    return "1";
-  }
-  else return "0";
+  setKD_B(kd);
+  kdB = getKD_B();
+  return "1";
 }
 String sendMotorBkd(){
   return String(kdB,4);
@@ -326,14 +275,14 @@ String sendMotorBkd(){
 
 ////////////////////////////////////////////////////////////////////
 String setFilterOrderA(int order){
-  if(!pidMode){
-    if(order > 2) setFilterOrder_A(2);
-    else if (order < 1) setFilterOrder_A(1);
-    else setFilterOrder_A(order);
-    orderA = getFilterOrder_A();
-    return "1";
-  }
-  else return "0";
+  if (order > 2)
+    setFilterOrder_A(2);
+  else if (order < 1)
+    setFilterOrder_A(1);
+  else
+    setFilterOrder_A(order);
+  orderA = getFilterOrder_A();
+  return "1";
 }
 String sendFilterOrderA(){ 
   return String(orderA);
@@ -341,14 +290,14 @@ String sendFilterOrderA(){
 
 
 String setFilterOrderB(int order){
-  if(!pidMode){
-    if(order > 2) setFilterOrder_B(2);
-    else if (order < 1) setFilterOrder_B(1);
-    else setFilterOrder_B(order);
-    orderB = getFilterOrder_B();
-    return "1";
-  }
-  else return "0";
+  if (order > 2)
+    setFilterOrder_B(2);
+  else if (order < 1)
+    setFilterOrder_B(1);
+  else
+    setFilterOrder_B(order);
+  orderB = getFilterOrder_B();
+  return "1";
 }
 String sendFilterOrderB(){ 
   return String(orderB);
@@ -361,12 +310,9 @@ String sendFilterOrderB(){
 
 //////////////////////////////////////////////////////////////////////
 String setCutOffFreqA(float f0){
-  if(!pidMode){
-    setFilterCutOffFreq_A(f0);
-    cutOffFreqA = getFilterCutOffFreq_A();
-    return "1";
-  }
-  else return "0";
+  setFilterCutOffFreq_A(f0);
+  cutOffFreqA = getFilterCutOffFreq_A();
+  return "1";
 }
 String sendCutOffFreqA(){ 
   return String(cutOffFreqA);
@@ -374,12 +320,9 @@ String sendCutOffFreqA(){
 
 
 String setCutOffFreqB(float f0){
-  if(!pidMode){
-    setFilterCutOffFreq_B(f0);
-    cutOffFreqB = getFilterCutOffFreq_B();
-    return "1";
-  }
-  else return "0";
+  setFilterCutOffFreq_B(f0);
+  cutOffFreqB = getFilterCutOffFreq_B();
+  return "1";
 }
 String sendCutOffFreqB(){ 
   return String(cutOffFreqB);
@@ -392,12 +335,9 @@ String sendCutOffFreqB(){
 
 //////////////////////////////////////////////////////////////////////
 String setStopFreqA(float freq){
-  if(!pidMode){
-    setStopFreq_A(freq);
-    encA_stopFreq = getStopFreq_A();
-    return "1";
-  }
-  else return "0";
+  setStopFreq_A(freq);
+  encA_stopFreq = getStopFreq_A();
+  return "1";
 }
 String sendStopFreqA(){ 
   return String(encA_stopFreq);
@@ -405,12 +345,9 @@ String sendStopFreqA(){
 
 
 String setStopFreqB(float freq){
-  if(!pidMode){
-    setStopFreq_B(freq);
-    encB_stopFreq = getStopFreq_B();
-    return "1";
-  }
-  else return "0";
+  setStopFreq_B(freq);
+  encB_stopFreq = getStopFreq_B();
+  return "1";
 }
 String sendStopFreqB(){ 
   return String(encB_stopFreq);
@@ -423,18 +360,17 @@ String sendStopFreqB(){
 
 ///////////////////////////////////////////////////////////////////
 String setRdirA(float rDirA){
-  if(!pidMode){
-    if(rDirA >= 0.0){
-      setRDIR_A(1.00);
-      rdirA = getRDIR_A();
-    }
-    else {
-      setRDIR_A(-1.00);
-      rdirA = getRDIR_A();
-    }
-    return "1";
+  if (rDirA >= 0.0)
+  {
+    setRDIR_A(1.00);
+    rdirA = getRDIR_A();
   }
-  else return "0";
+  else
+  {
+    setRDIR_A(-1.00);
+    rdirA = getRDIR_A();
+  }
+  return "1";
 }
 String sendRdirA(){ 
   return String(rdirA);
@@ -442,18 +378,17 @@ String sendRdirA(){
 
 
 String setRdirB(float rDirB){
-  if(!pidMode){
-    if(rDirB >= 0.0){
-      setRDIR_B(1.00);
-      rdirB = getRDIR_B();
-    }
-    else {
-      setRDIR_B(-1.00);
-      rdirB = getRDIR_B();
-    }
-    return "1";
+  if (rDirB >= 0.0)
+  {
+    setRDIR_B(1.00);
+    rdirB = getRDIR_B();
   }
-  else return "0";
+  else
+  {
+    setRDIR_B(-1.00);
+    rdirB = getRDIR_B();
+  }
+  return "1";
 }
 String sendRdirB(){ 
   return String(rdirB);
@@ -465,13 +400,10 @@ String sendRdirB(){
 
 //////////////////////////////////////////////////////////////////////
 String setI2Caddress(int address){
-  if(!pidMode){
-    setI2CADDRESS(address);
-    i2cAddress = getI2CADDRESS();
-    Wire.begin(i2cAddress);                
-    return "1";
-  }
-  else return "0";
+  setI2CADDRESS(address);
+  i2cAddress = getI2CADDRESS();
+  Wire.begin(i2cAddress);
+  return "1";
 }
 String sendI2Caddress(){
   return String(i2cAddress);
@@ -479,11 +411,9 @@ String sendI2Caddress(){
 
 
 String resetEEPROM(){
-  if(!pidMode){
-    setFIRST_TIME(0);
-    return "1";
-  }
-  else return "0";
+  setFIRST_TIME(0);
+  updateGlobalParamsFromEERPOM();
+  return "1";
 }
 ////////////////////////////////////////////////////////////////////////
 

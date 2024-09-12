@@ -123,11 +123,11 @@ void setup() {
   Wire.onRequest(i2cSlaveSendData);
 
   onLed0();
-  delay(800);
+  delay(500);
   offLed0();
-  delay(400);
+  delay(500);
   onLed1();
-  delay(800);
+  delay(500);
   offLed1();
   
   encoderInit();
